@@ -10,7 +10,7 @@ public class EventsDefinitionTests
     [Trait("Category", "SkipCI")]
     public void AllEventTypes_ShouldBeDefined()
     {
-        var events = new object[]
+        var events = new IDomainEvent[]
         {
             new PlayerAttackedByZombieEvent(1, 2, BobyPart.Head),
             new PlayerDiedEvent(1),

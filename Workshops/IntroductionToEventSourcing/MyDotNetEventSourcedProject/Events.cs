@@ -7,4 +7,4 @@ public enum BobyPart
 
 public record PlayerDiedEvent(int PlayerId): EventBase(PlayerId.ToString());
 
-public record PlayerAttackedByZombieEvent(int PlayerId, int ZombieId, BobyPart Target);
+public record PlayerAttackedByZombieEvent(int PlayerId, int ZombieId, BobyPart Target): EventBase(PlayerId.ToString());
