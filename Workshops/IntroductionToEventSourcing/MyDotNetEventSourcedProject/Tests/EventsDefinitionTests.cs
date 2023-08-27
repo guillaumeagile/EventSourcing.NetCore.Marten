@@ -6,10 +6,10 @@ namespace MyDotNetEventSourcedProject;
 
 public class EventsDefinitionTests
 {
-    IDomainEvent[] events;
+    object[] events;
     public EventsDefinitionTests()
     {
-        events = new IDomainEvent[]
+        events = new object[]
         {
             new PlayerEnteredTheArena(1),
             new PlayerAttackedByZombieEvent(1, 2, BodyPart.Head),

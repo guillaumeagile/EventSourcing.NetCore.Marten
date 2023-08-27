@@ -9,6 +9,7 @@ public enum BodyPart
     Arms,
     Legs
 }
+
 public record PlayerEnteredTheArena(int PlayerId): EventBase(PlayerId.ToString());
 public record PlayerDiedEvent(int PlayerId): EventBase(PlayerId.ToString());
 
