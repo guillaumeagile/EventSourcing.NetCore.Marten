@@ -13,4 +13,16 @@
       <PackageReference Include="xunit" Version="2.5.1-pre.20" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="FluentAssertions.LanguageExt">
+        <HintPath>..\..\..\..\..\..\..\.nuget\packages\fluentassertions.languageext\0.4.0\lib\net6.0\FluentAssertions.LanguageExt.dll</HintPath>
+      </Reference>
+      <Reference Include="LanguageExt.Core">
+        <HintPath>..\..\..\..\..\..\..\.nuget\packages\languageext.core\4.4.3\lib\netstandard2.0\LanguageExt.Core.dll</HintPath>
+      </Reference>
+      <Reference Include="LanguageExt.Sys">
+        <HintPath>..\..\..\..\..\..\..\.nuget\packages\languageext.sys\4.4.3\lib\netstandard2.0\LanguageExt.Sys.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
