@@ -20,10 +20,9 @@ public class OneClassShouldBeCentralizingEventsForNow
     public void WhileNoEvents()
     {
         var game = Game.GetGame(events);
-        var player = game.GetPlayerState(1);
 
-        player.Should().BeNone();
-       }
+        game.progession.Should().Be(ProgressionState.NotStarted);
+    }
 
     [Fact]
     [Trait("Category", "SkipCI")]
@@ -35,9 +34,5 @@ public class OneClassShouldBeCentralizingEventsForNow
         game.progession.Should().Be(ProgressionState.Running);
 
     }
-    /*    var player = game.GetPlayerState(1);
-player.Should().BeSome();
-              var expectedPlayer = new Player(1, 100);
-              player.Should().Be(expectedPlayer);
- */
+
 }

@@ -20,16 +20,9 @@ public record Game(ProgressionState progession, IEnumerable<Player> listOfPlayer
     {
         return @event switch
         {
-            PlayerEnteredTheArena(int PlayerId) => game with
-            {
-                progession = ProgressionState.Running
-            },
+            // pattern matching ici
+            // ,
             _ => game
         };
-    }
-
-    public Option<Player> GetPlayerState(int i)
-    {
-        return Option<Player>.None;
     }
 }
