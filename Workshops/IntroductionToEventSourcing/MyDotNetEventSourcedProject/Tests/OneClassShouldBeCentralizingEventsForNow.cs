@@ -19,12 +19,11 @@ public class OneClassShouldBeCentralizingEventsForNow
     }
 
 
-
     [Fact]
     [Trait("Category", "SkipCI")]
     public void WhileNoEvents()
     {
-        var game = new Game(events);
+        var game = Game.GetGame(events);
 
         var player = game.GetPlayerState(1);
 
@@ -35,7 +34,7 @@ public class OneClassShouldBeCentralizingEventsForNow
     [Trait("Category", "SkipCI")]
     public void CreatedEventIsExisting()
     {
-        var game = new Game(events);
+        var game = Game.GetGame(events);
 
         var player = game.GetPlayerState(1);
 

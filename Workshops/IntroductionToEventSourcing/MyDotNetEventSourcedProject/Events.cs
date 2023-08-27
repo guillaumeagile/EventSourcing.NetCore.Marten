@@ -1,10 +1,15 @@
 namespace MyDotNetEventSourcedProject;
 
-public enum BobyPart
+public enum BodyPart
 {
-    Head
+    Head,
+    Chest,
+    Belly,
+    Genitals,
+    Arms,
+    Legs
 }
 public record PlayerEnteredTheArena(int PlayerId): EventBase(PlayerId.ToString());
 public record PlayerDiedEvent(int PlayerId): EventBase(PlayerId.ToString());
 
-public record PlayerAttackedByZombieEvent(int PlayerId, int ZombieId, BobyPart Target): EventBase(PlayerId.ToString());
+public record PlayerAttackedByZombieEvent(int PlayerId, int ZombieId, BodyPart Target): EventBase(PlayerId.ToString());
