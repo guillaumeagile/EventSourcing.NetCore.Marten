@@ -5,8 +5,13 @@ namespace MyDotNetEventSourcedProject;
 
 public class Game
 {
+    public Game(IEnumerable<IDomainEvent> domainEvents)
+    {
+
+    }
+
     public Option<Player> GetPlayerState(int i)
     {
-        throw new NotImplementedException();
+       return Option<Player>.None;
     }
 }

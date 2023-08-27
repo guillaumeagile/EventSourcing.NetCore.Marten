@@ -24,13 +24,24 @@ public class OneClassShouldBeCentralizingEventsForNow
     [Trait("Category", "SkipCI")]
     public void WhileNoEvents()
     {
-        var game = new Game();
+        var game = new Game(events);
 
         var player = game.GetPlayerState(1);
 
         player.Should().BeNone();
-     //   Should().BeSome();
-      //  player.HealthPercent.Should().Be(100);
+       }
+
+    [Fact]
+    [Trait("Category", "SkipCI")]
+    public void CreatedEventIsExisting()
+    {
+        var game = new Game(events);
+
+        var player = game.GetPlayerState(1);
+
+        player.Should().BeSome();
+        var expectedPlayer = new Player(1, 100);
+        player.Should().Be(expectedPlayer);
 
     }
 }
