@@ -10,7 +10,7 @@ public enum BodyPart
     Legs
 }
 
-public record PlayerEnteredTheArena(int PlayerId): EventBase(PlayerId.ToString());
+public record PlayerEnteredTheGame(int PlayerId): EventBase(PlayerId.ToString());
 public record PlayerDiedEvent(int PlayerId): EventBase(PlayerId.ToString());
 
 public record PlayerAttackedByZombieEvent(int PlayerId, int ZombieId, BodyPart Target): EventBase(PlayerId.ToString());

@@ -20,16 +20,14 @@ public record Game(ProgressionState progession, IEnumerable<Player> listOfPlayer
     {
         return @event switch
         {
-            PlayerEnteredTheArena(int PlayerId) => game with
+            PlayerEnteredTheGame(int PlayerId) => game with  // https://www.educative.io/answers/what-is-non-destructive-mutation-in-c-sharp-90
             {
-                progession = ProgressionState.Running
+                progession = ProgressionState.Running,
+                listOfPlayers =  //new []{ new Player(PlayerId, 100)}
+                                 game.listOfPlayers.Append((new Player(PlayerId, 100)))
+                                // game.listOfPlayers.Concat(new List<Player> { new (PlayerId, 100)})
             },
             _ => game
         };
-    }
-
-    public Option<Player> GetPlayerState(int i)
-    {
-        return Option<Player>.None;
     }
 }

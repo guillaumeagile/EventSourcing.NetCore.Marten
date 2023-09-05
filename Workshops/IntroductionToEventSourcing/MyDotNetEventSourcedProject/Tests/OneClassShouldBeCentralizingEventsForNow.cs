@@ -7,34 +7,59 @@ namespace MyDotNetEventSourcedProject;
 
 public class OneClassShouldBeCentralizingEventsForNow
 {
-    List< IDomainEvent> events = new ();
+    List< IDomainEvent> events;
     public OneClassShouldBeCentralizingEventsForNow()
     {
-        //  new PlayerEnteredTheArena(1),
-          //  new PlayerAttackedByZombieEvent(1, 2, BobyPart.Head),
-          //  new PlayerDiedEvent(1),
+        events = new ();
     }
 
     [Fact]
     [Trait("Category", "SkipCI")]
-    public void WhileNoEvents()
+    public void WhileNoEvents_BeginStateIsS()
     {
         var game = Game.GetGame(events);
-        var player = game.GetPlayerState(1);
+        game.progession.Should().Be(ProgressionState.NotStarted);
 
-        player.Should().BeNone();
-       }
+    }
 
     [Fact]
     [Trait("Category", "SkipCI")]
     public void CreatedEventIsExisting()
     {
-        events.Add(new PlayerEnteredTheArena(1));
+        events.Add(new PlayerEnteredTheGame(1));
         var game = Game.GetGame(events);
 
         game.progession.Should().Be(ProgressionState.Running);
-
     }
+
+    [Fact]
+    [Trait("Category", "SkipCI")]
+    public void OneEventsForOnePlayerInTheGame()
+    {
+        events.Add(new PlayerEnteredTheGame(1));
+        var game = Game.GetGame(events);
+
+        game.progession.Should().Be(ProgressionState.Running);
+        game.listOfPlayers.Count().Should().Be(1);
+    }
+
+
+    [Fact]
+    [Trait("Category", "SkipCI")]
+    public void TwoEventsForTwoPlayersInTheGame()
+    {
+        events.Add(new PlayerEnteredTheGame(1));
+        events.Add(new PlayerEnteredTheGame(2));
+        var game = Game.GetGame(events);
+
+        game.progession.Should().Be(ProgressionState.Running);
+        game.listOfPlayers.Count().Should().Be(2);
+    }
+
+
+
+
+
     /*    var player = game.GetPlayerState(1);
 player.Should().BeSome();
               var expectedPlayer = new Player(1, 100);
