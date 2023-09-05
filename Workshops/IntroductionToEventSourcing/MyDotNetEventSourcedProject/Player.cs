@@ -7,8 +7,9 @@ public record Player(int Id, int LifePoints)
 {
     public Player GetPlayerState(IDomainEvent[] events) => this;
 
-    public static Player Create()
+
+    public Player ReveceiveAttack(int InjuryReceived)
     {
-        throw new NotImplementedException();
+        return this with { LifePoints = LifePoints - InjuryReceived };
     }
 }

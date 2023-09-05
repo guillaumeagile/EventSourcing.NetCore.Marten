@@ -27,19 +27,20 @@ public record Game(ProgressionState progession, IEnumerable<Player> listOfPlayer
             },
             PlayerIsAttacked(int PlayerId, int InjuryReceived) => game with
             {
-                listOfPlayers = AttackOnePlayer(game, PlayerId, InjuryReceived)
+                listOfPlayers = ListAfterOnePlayerHasBeenAttacked(game, PlayerId, InjuryReceived)
             },
             _ => game
         };
     }
 
-    private static IEnumerable<Player> AttackOnePlayer(Game game, int playerId, int injuryReceived)
+    private static IEnumerable<Player> ListAfterOnePlayerHasBeenAttacked(Game game, int playerId, int injuryReceived)
     {
         var concernedPlayer = game.listOfPlayers.Filter(p => p.Id == playerId).FirstOrDefault();
-        var previousLifePoints = concernedPlayer.LifePoints;
+        var listOfPlayers = game.listOfPlayers.Filter(p => p.Id != playerId).ToList();
 
-        var listOfUnchangedPlayers = game.listOfPlayers.Filter(p => p.Id != playerId).ToList();
-        listOfUnchangedPlayers.Add(new Player(playerId, previousLifePoints - injuryReceived));
-        return listOfUnchangedPlayers;
+        // à remplacer par le pattern FAN OUT (distribution d'evenements aux entités concernées)
+        listOfPlayers.Add(concernedPlayer.ReveceiveAttack(injuryReceived));
+
+        return listOfPlayers;
     }
 }
