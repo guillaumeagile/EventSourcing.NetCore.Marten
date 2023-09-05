@@ -56,6 +56,50 @@ public class OneClassShouldBeCentralizingEventsForNow
         game.listOfPlayers.Count().Should().Be(2);
     }
 
+    [Fact]
+    [Trait("Category", "SkipCI")]
+    public void OnePlayerInTheGameIsWounded()
+    {
+        events.Add(new PlayerEnteredTheGame(1));
+        events.Add(new PlayerIsAttacked(1, 68));
+        var game = Game.GetGame(events);
+
+        game.listOfPlayers.First().LifePoints.Should().Be(32);
+    }
+
+    [Fact]
+    [Trait("Category", "SkipCI")]
+    public void OnePlayerOutOfTwoInTheGameIsWounded()
+    {
+        events.Add(new PlayerEnteredTheGame(1));
+        events.Add(new PlayerEnteredTheGame(2));
+
+        events.Add(new PlayerIsAttacked(1, 50));
+        events.Add(new PlayerIsAttacked(2, 10));
+
+        var game = Game.GetGame(events);
+
+        game.listOfPlayers.First().Id.Should().Be(1);
+        game.listOfPlayers.First().LifePoints.Should().Be(50);
+        game.listOfPlayers.Last().LifePoints.Should().Be(90);
+    }
+
+    [Fact]
+    [Trait("Category", "SkipCI")]
+    public void OnePlayerOutOfTwoInTheGameIsWoundedButOrderOfEventChangeTheOrderInTheListOfPlayers()
+    {
+        events.Add(new PlayerEnteredTheGame(1));
+        events.Add(new PlayerEnteredTheGame(2));
+
+        events.Add(new PlayerIsAttacked(2, 10));
+        events.Add(new PlayerIsAttacked(1, 50));
+
+        var game = Game.GetGame(events);
+
+        game.listOfPlayers.First().Id.Should().Be(2);
+        game.listOfPlayers.First().LifePoints.Should().Be(90);
+        // TEST DE CONSOLIDATION: pour nous, ca ne pose pas de probleme
+    }
 
 
 
@@ -66,3 +110,4 @@ player.Should().BeSome();
               player.Should().Be(expectedPlayer);
  */
 }
+
