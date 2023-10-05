@@ -12,7 +12,7 @@ public class EventsDefinitionTests
         events = new object[]
         {
             new PlayerEnteredTheGame(1),
-            new PlayerAttackedByZombieEvent(1, 2, BodyPart.Head),
+            new PlayerIsAttacked(1 , 2),
             new PlayerDiedEvent(1),
         };
     }

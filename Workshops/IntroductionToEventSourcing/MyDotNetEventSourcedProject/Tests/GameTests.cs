@@ -1,14 +1,15 @@
-﻿using FluentAssertions;
+﻿using System.Diagnostics.Tracing;
+using FluentAssertions;
 using MediatR;
 using FluentAssertions.LanguageExt;
 using Xunit;
 
 namespace MyDotNetEventSourcedProject;
 
-public class OneClassShouldBeCentralizingEventsForNow
+public class GameTests
 {
     List< IDomainEvent> events;
-    public OneClassShouldBeCentralizingEventsForNow()
+    public GameTests()
     {
         events = new ();
     }
@@ -69,6 +70,60 @@ public class OneClassShouldBeCentralizingEventsForNow
 
     [Fact]
     [Trait("Category", "SkipCI")]
+    public void OnePlayerInTheGameIsWoundedAndDied()
+    {
+        IEventListener myeventListener = new FakeEventListener();
+        Game.Subscribe(myeventListener);
+
+        events.Add(new PlayerEnteredTheGame(1));
+        events.Add(new PlayerIsAttacked(1, 100));
+
+        var game = Game.GetGame(events);
+
+
+        game.listOfPlayers.First().LifePoints.Should().Be(0);
+        myeventListener.Events.Should().Contain(new PlayerDiedEvent(1));
+    }
+
+    [Fact]
+    [Trait("Category", "SkipCI")]
+    public void OnePlayerInTheGameHasDiedAndThenHasLeftTheGame()
+    {
+        IEventListener myeventListener = new FakeEventListener();
+        Game.Subscribe(myeventListener);
+
+        events.Add(new PlayerEnteredTheGame(222));
+        events.Add(new PlayerDiedEvent(222));
+
+        var game = Game.GetGame(events);
+
+        game.listOfPlayers.Count().Should().Be(0);
+
+    }
+
+    [Fact]
+    [Trait("Category", "SkipCI")]
+    public void OnePlayerOutotTwoInTheGameHasDiedAndThenHasLeftTheGame()
+    {
+        IEventListener myeventListener = new FakeEventListener();
+        Game.Subscribe(myeventListener);
+
+        events.Add(new PlayerEnteredTheGame(222));
+        events.Add(new PlayerEnteredTheGame(111));
+        events.Add(new PlayerDiedEvent(222));
+
+        var game = Game.GetGame(events);
+
+        game.listOfPlayers.Count().Should().Be(1);
+        game.listOfPlayers.First().Id.Should().Be(111);
+
+    }
+
+
+
+
+    [Fact]
+    [Trait("Category", "SkipCI")]
     public void OnePlayerOutOfTwoInTheGameIsWounded()
     {
         events.Add(new PlayerEnteredTheGame(1));
@@ -101,13 +156,4 @@ public class OneClassShouldBeCentralizingEventsForNow
         // TEST DE CONSOLIDATION: pour nous, ca ne pose pas de probleme
     }
 
-
-
-
-    /*    var player = game.GetPlayerState(1);
-player.Should().BeSome();
-              var expectedPlayer = new Player(1, 100);
-              player.Should().Be(expectedPlayer);
- */
 }
-

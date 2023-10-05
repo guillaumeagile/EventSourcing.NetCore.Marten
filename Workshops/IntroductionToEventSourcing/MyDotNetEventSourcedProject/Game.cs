@@ -26,11 +26,21 @@ public record Game(ProgressionState progession, IEnumerable<Player> listOfPlayer
                 listOfPlayers =  game.listOfPlayers.Append((new Player(PlayerId, 100)))
             },
             PlayerIsAttacked(int PlayerId, int InjuryReceived) => game with
-            {
-                listOfPlayers = ListAfterOnePlayerHasBeenAttacked(game, PlayerId, InjuryReceived)
-            },
+                          {
+                              listOfPlayers = ListAfterOnePlayerHasBeenAttacked(game, PlayerId, InjuryReceived)
+                          },
+            PlayerDiedEvent(int PlayerId) => game with
+                                                      {
+                                                          listOfPlayers = ListAfterOnePlayerHasDied(game, PlayerId)
+                                                      },
             _ => game
         };
+    }
+
+    private static IEnumerable<Player> ListAfterOnePlayerHasDied(Game game, int playerId)
+    {
+        return game.listOfPlayers.Filter(p => p.Id != playerId).ToList();
+
     }
 
     private static IEnumerable<Player> ListAfterOnePlayerHasBeenAttacked(Game game, int playerId, int injuryReceived)
@@ -39,8 +49,14 @@ public record Game(ProgressionState progession, IEnumerable<Player> listOfPlayer
         var listOfPlayers = game.listOfPlayers.Filter(p => p.Id != playerId).ToList();
 
         // à remplacer par le pattern FAN OUT (distribution d'evenements aux entités concernées)
-        listOfPlayers.Add(concernedPlayer.ReveceiveAttack(injuryReceived));
+        listOfPlayers.Add(concernedPlayer.ReveceiveAttack(injuryReceived, MyeventListener));
 
         return listOfPlayers;
+    }
+
+    private static IEventListener MyeventListener;
+    public static void Subscribe(IEventListener myeventListener)
+    {
+        MyeventListener = myeventListener;
     }
 }
