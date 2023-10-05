@@ -1,6 +1,6 @@
 namespace MyDotNetEventSourcedProject;
 
-public interface IEventListener
+public interface IEventStore
 {
     IEnumerable<IDomainEvent> Events { get; }
 

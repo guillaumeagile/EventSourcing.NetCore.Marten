@@ -18,7 +18,7 @@ public class PlayerTests
 
         var initPlayer = new Player(1, 100);
 
-        var actualNewPlayer = initPlayer.ReveceiveAttack(25, new FakeEventListener());
+        var actualNewPlayer = initPlayer.ReveceiveAttack(25, new FakeEventStore());
 
         actualNewPlayer.Id.Should().Be(1);
         actualNewPlayer.LifePoints.Should().Be(75);
@@ -31,8 +31,8 @@ public class PlayerTests
 
         var initPlayer = new Player(1, 100);
 
-        var transit = initPlayer.ReveceiveAttack(25, new FakeEventListener());
-        var actualNewPlayer = transit.ReveceiveAttack(25, new FakeEventListener());
+        var transit = initPlayer.ReveceiveAttack(25, new FakeEventStore());
+        var actualNewPlayer = transit.ReveceiveAttack(25, new FakeEventStore());
 
         actualNewPlayer.Id.Should().Be(1);
         actualNewPlayer.LifePoints.Should().Be(50);

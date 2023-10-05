@@ -72,25 +72,26 @@ public class GameTests
     [Trait("Category", "SkipCI")]
     public void OnePlayerInTheGameIsWoundedAndDied()
     {
-        IEventListener myeventListener = new FakeEventListener();
-        Game.Subscribe(myeventListener);
+        IEventStore myeventStore = new FakeEventStore();
+        Game.Subscribe(myeventStore);
 
-        events.Add(new PlayerEnteredTheGame(1));
-        events.Add(new PlayerIsAttacked(1, 100));
+        myeventStore.PushNewEvent(new PlayerEnteredTheGame(1));
+        myeventStore.PushNewEvent(new PlayerIsAttacked(1, 100));
 
-        var game = Game.GetGame(events);
+        var game = Game.GetGame(myeventStore);
+       game.listOfPlayers.First().LifePoints.Should().Be(0);
+       myeventStore.Events.Should().Contain(new PlayerDiedEvent(1));
 
-
-        game.listOfPlayers.First().LifePoints.Should().Be(0);
-        myeventListener.Events.Should().Contain(new PlayerDiedEvent(1));
+       var game2 = Game.GetGame(myeventStore);
+       game2.listOfPlayers.Should().BeEmpty();
     }
 
     [Fact]
     [Trait("Category", "SkipCI")]
     public void OnePlayerInTheGameHasDiedAndThenHasLeftTheGame()
     {
-        IEventListener myeventListener = new FakeEventListener();
-        Game.Subscribe(myeventListener);
+        IEventStore myeventStore = new FakeEventStore();
+        Game.Subscribe(myeventStore);
 
         events.Add(new PlayerEnteredTheGame(222));
         events.Add(new PlayerDiedEvent(222));
@@ -105,8 +106,8 @@ public class GameTests
     [Trait("Category", "SkipCI")]
     public void OnePlayerOutotTwoInTheGameHasDiedAndThenHasLeftTheGame()
     {
-        IEventListener myeventListener = new FakeEventListener();
-        Game.Subscribe(myeventListener);
+        IEventStore myeventStore = new FakeEventStore();
+        Game.Subscribe(myeventStore);
 
         events.Add(new PlayerEnteredTheGame(222));
         events.Add(new PlayerEnteredTheGame(111));
@@ -116,10 +117,7 @@ public class GameTests
 
         game.listOfPlayers.Count().Should().Be(1);
         game.listOfPlayers.First().Id.Should().Be(111);
-
     }
-
-
 
 
     [Fact]
@@ -155,5 +153,7 @@ public class GameTests
         game.listOfPlayers.First().LifePoints.Should().Be(90);
         // TEST DE CONSOLIDATION: pour nous, ca ne pose pas de probleme
     }
+
+
 
 }

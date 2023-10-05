@@ -11,10 +11,15 @@ namespace MyDotNetEventSourcedProject;
     }
 public record Game(ProgressionState progession, IEnumerable<Player> listOfPlayers)
 {
+    public static Game Default() => new(ProgressionState.NotStarted, new List<Player>() );
+
+    public static Game GetGame(IEventStore myeventStore)
+    {
+        return GetGame(myeventStore.Events);
+    }
+
     public static Game GetGame(IEnumerable<object> events) =>
         events.Aggregate(Game.Default(), Game.When);
-
-    public static Game Default() => new(ProgressionState.NotStarted, new List<Player>() );
 
     public static Game When(Game game, object @event)
     {
@@ -49,14 +54,16 @@ public record Game(ProgressionState progession, IEnumerable<Player> listOfPlayer
         var listOfPlayers = game.listOfPlayers.Filter(p => p.Id != playerId).ToList();
 
         // à remplacer par le pattern FAN OUT (distribution d'evenements aux entités concernées)
-        listOfPlayers.Add(concernedPlayer.ReveceiveAttack(injuryReceived, MyeventListener));
+        listOfPlayers.Add(concernedPlayer.ReveceiveAttack(injuryReceived, _myeventStore));
 
         return listOfPlayers;
     }
 
-    private static IEventListener MyeventListener;
-    public static void Subscribe(IEventListener myeventListener)
+    private static IEventStore _myeventStore;
+    public static void Subscribe(IEventStore myeventStore)
     {
-        MyeventListener = myeventListener;
+        _myeventStore = myeventStore;
     }
+
+
 }
