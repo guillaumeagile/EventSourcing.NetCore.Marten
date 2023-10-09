@@ -14,7 +14,7 @@ public class GameTests
         events = new ();
     }
 
-    [Fact]
+   [ Fact]
     [Trait("Category", "SkipCI")]
     public void WhileNoEvents_BeginStateIsS()
     {
